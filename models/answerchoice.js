@@ -14,7 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   AnswerChoice.init({
-    answer_id: DataTypes.INTEGER
+    answer_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    choice_id : {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   }, {
     sequelize,
     modelName: 'AnswerChoice',
