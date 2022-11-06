@@ -8,11 +8,13 @@ app.use(express.urlencoded({ extended: true }));
 const surveyRouter = require("./routes/survey");
 const questionRouter = require("./routes/question");
 const questionTypeRouter = require("./routes/questionType");
+const ChoiceRouter = require("./routes/Choice");
 const answerRouter = require("./routes/answer");
 
 app.use("/survey", surveyRouter);
 app.use("/question", questionRouter);
 app.use("/question_type", questionTypeRouter);
+app.use("/choice", ChoiceRouter);
 app.use("/answer", answerRouter);
 
 app.listen({ port: 3000 }, async () => {

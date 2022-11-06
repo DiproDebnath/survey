@@ -1,11 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const { Survey, Question, Answer } = require("../models");
+const { Survey, Question, Answer, Choice } = require("../models");
 
 router.get("/", async (req, res) => {
   try {
     const survey = await Survey.findAll({
-      include: Question,
+      include: [
+        { 
+          model: Question, 
+          include: [
+            {
+            model: Choice,
+          }
+          ]
+        }
+      ],
     });
     res.json(survey);
   } catch (err) {
@@ -17,7 +26,24 @@ router.get("/result/:id", async (req, res) => {
   try {
     let survey = await Survey.findOne({
       where: { id: req.params.id },
-      include: [{ model: Question, include: Answer }],
+      include: [
+        { 
+          model: Question, 
+          include: [
+            {
+              model: Answer,
+              include: [
+                {
+                  model: Choice,
+                  through: {
+                    attributes: [],
+                  },
+                }
+              ]
+            }
+          ]
+        }
+      ],
     });
     survey = survey == null ? { message: "No Survey found" } : survey;
     res.json(survey);

@@ -1,5 +1,7 @@
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Choice extends Model {
     /**
@@ -7,20 +9,27 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ Question, Answer, AnswerChoice }) {
+     toJSON(){
+      return {...this.get(), AnswerChoice: undefined}
+    }
+     static associate({ Question, Answer, AnswerChoice }) {
       // define association here
-      this.belongsTo(Question, { foreignKey: "question_id" });
-      this.belongsToMany(Answer, { through: AnswerChoice });
+      this.belongsTo(Question, {foreignKey: "questionId"});
+      this.belongsToMany(Answer, { through: AnswerChoice, foreignKey: "choiceId" });
     }
   }
-  Choice.init(
-    {
-      choice: DataTypes.STRING,
+  Choice.init({
+    choice: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-    {
-      sequelize,
-      modelName: "Choice",
-    }
-  );
+    questionId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+  }, {
+    sequelize,
+    modelName: 'Choice',
+  });
   return Choice;
 };
