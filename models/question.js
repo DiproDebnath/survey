@@ -24,7 +24,18 @@ module.exports = (sequelize, DataTypes) => {
     surveyId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      unique: true,
+      
+      validate: {
+        isExist(value) {
+          console.log(value);
+          let count = Question.count({
+            where: value
+          })
+          if (count !== 0) {
+            throw new Error('You can add single question in a survey');
+          }
+        }
+      }
     },
     questionTypeId: {
       type: DataTypes.INTEGER,

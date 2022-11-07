@@ -1,13 +1,14 @@
+const e = require("express");
 const express = require("express");
 const router = express.Router();
-const { Question, Answer, Choice } = require("../models");
+const { Question, Choice } = require("../models");
 
 router.get("/", async (req, res) => {
   try {
     const question = await Question.findAll({
       include: [
         {
-          model: Answer,
+          model: Choice,
         },
       ],
     });
@@ -38,8 +39,14 @@ router.post("/create", async (req, res) => {
 
     res.json(question);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Internal server error" });
+
+    if(err.errors){
+      res.json({ message: err.errors[0].message });
+    }else{
+      res.status(500).json({ message: "Internal server error" });
+    }
+    
+    
   }
 });
 router.put("/update/:id", async (req, res) => {

@@ -9,10 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-     toJSON(){
-      return {...this.get(), AnswerChoice: undefined}
-    }
-     static associate({Answer, Choice}) {
+    
+     static associate(models) {
       // define association here
      
     }
