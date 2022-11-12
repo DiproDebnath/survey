@@ -26,11 +26,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       
       validate: {
-        isExist(value) {
-          console.log(value);
-          let count = Question.count({
-            where: value
+        async isExist(value) {
+          
+          let count = await Question.count({
+            where: {surveyId: value}
           })
+         
           if (count !== 0) {
             throw new Error('You can add single question in a survey');
           }
