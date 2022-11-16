@@ -1,107 +1,43 @@
+const createHttpError = require("http-errors");
 const { Survey, Question, Answer, Choice } = require("../models");
+const serveyService = require("../services/serveyService");
 
 module.exports = {
   getAllSurvey: async (req, res) => {
-    try {
-      const survey = await Survey.findAll({
-        include: [
-          {
-            model: Question,
-            include: [
-              {
-                model: Choice,
-              },
-            ],
-          },
-        ],
-      });
-      res.json(survey);
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ message: "Internal server error" });
+    const surveyData = await serveyService.getAllSurvey();
+    if (!surveyData.success) {
+      throw createHttpError(surveyData.status, surveyData.message);
     }
+    res.json(surveyData.data);
   },
   getSurveyById: async (req, res) => {
-    try {
-      let survey = await Survey.findOne({
-        where: { id: req.params.id },
-        include: [
-          {
-            model: Question,
-            include: [
-              {
-                model: Choice,
-              },
-            ],
-          },
-        ],
-      });
-      survey = survey == null ? { message: "No Survey found" } : survey;
-      res.json(survey);
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ message: "Internal server error" });
+    const surveyData = await serveyService.getSurveyById(req.params.id);
+    if (!surveyData.success) {
+      throw createHttpError(surveyData.status, surveyData.message);
     }
+    res.json(surveyData.data);
   },
+
   getResultById: async (req, res) => {
-    try {
-      let survey = await Survey.findOne({
-        where: { id: req.params.id },
-        include: [
-          {
-            model: Question,
-            include: [
-              {
-                model: Answer,
-                include: [
-                  {
-                    model: Choice,
-                    through: {
-                      attributes: [],
-                    },
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      });
-      survey = survey == null ? { message: "No Survey found" } : survey;
-      res.json(survey);
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ message: "Internal server error" });
+    const surveyData = await serveyService.getResultById(req.params.id);
+    if (!surveyData.success) {
+      throw createHttpError(surveyData.status, surveyData.message);
     }
+    res.json(surveyData.data);
   },
 
   createSurvey: async (req, res) => {
-    try {
-      const survey = await Survey.create({
-        name: req.body.name,
-      });
+    const surveyData = await serveyService.createSurvey(req.body.name);
 
-      res.json(survey);
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ message: "Internal server error" });
-    }
+    res.status(surveyData.status).json(surveyData.data);
   },
 
   updateSurveyById: async (req, res) => {
-    try {
-      await Survey.update(
-        {
-          name: req.body.name,
-        },
-        {
-          where: { id: req.params.id },
-        }
-      );
-      const survey = await Survey.findOne({ where: { id: req.params.id } });
-      res.json(survey);
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ message: "Internal server error" });
-    }
+    const surveyData = await serveyService.createSurvey(
+      req.params.id,
+      req.body.name
+    );
+
+    res.status(surveyData.status).json(surveyData.data);
   },
 };
