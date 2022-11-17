@@ -9,9 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-     static associate({ Survey, QuestionType, Answer, Choice }) {
+     static associate({ Survey, Answer, Choice }) {
       this.belongsTo(Survey, {foreignKey: "surveyId"} );
-      this.belongsTo(QuestionType, {foreignKey: "questionTypeId"} );
       this.hasMany(Choice, {foreignKey: "questionId"});
       this.hasMany(Answer, {foreignKey: "questionId"});
     }
@@ -38,9 +37,9 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    questionTypeId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+    questionType: {
+      type:DataTypes.ENUM("single", "multiple"),
+      defaultValue: "single",
     },
   }, {
     sequelize,

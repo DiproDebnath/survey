@@ -33,7 +33,7 @@ module.exports = {
           const question = await Question.create({
             question: req.body.question,
             surveyId: req.body.surveyId,
-            questionTypeId: req.body.questionTypeId,
+            questionType: req.body.questionType,
           });
       
           res.json(question);
@@ -44,8 +44,6 @@ module.exports = {
           }else{
             res.status(500).json({ message: "Internal server error" });
           }
-          
-          
         }
       },
       updateQuestion: async (req, res) => {

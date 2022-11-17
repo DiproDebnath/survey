@@ -1,10 +1,27 @@
 const express = require("express");
 const app = express();
-const createError = require("http-errors");
 const { sequelize } = require("./models");
+
+const authController = require("./controllers/authController");
+const middleware = require('./middleware');
+const { captureError } = require("./utils/helper");
+
+
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+
+app.get("/", (req, res) => {
+  res.json("Survey Project");
+});
+
+app.post("/signin", middleware.validator("user", "loginUser"), captureError(authController.signIn));
+
+
+
+
 
 const surveyRouter = require("./routes/survey");
 const questionRouter = require("./routes/question");
@@ -12,9 +29,7 @@ const questionTypeRouter = require("./routes/questionType");
 const ChoiceRouter = require("./routes/Choice");
 const answerRouter = require("./routes/answer");
 
-app.get("/", (req, res) => {
-  return createError(401, "Please login to view this page.");
-});
+
 
 app.use("/survey", surveyRouter);
 app.use("/question", questionRouter);
@@ -24,7 +39,7 @@ app.use("/answer", answerRouter);
 
 // Error Handler
 app.use((err, req, res, next) => {
-  console.log( err);
+  console.log(err);
   if (err.status && err.status !== 500) {
     return res.status(err.status).json({
       error: {
