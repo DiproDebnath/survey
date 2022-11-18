@@ -6,9 +6,9 @@ const Validators = require('../validators')
 
 /**
  * 
- * @param {*} validator 
- * @param {*} schema 
- * @returns 
+ * @param {string} validator 
+ * @param {string} schema 
+ * @returns object
  */
 module.exports = function(validator, schema) {
     

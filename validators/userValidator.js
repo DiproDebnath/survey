@@ -1,9 +1,9 @@
 const Joi = require("joi");
 
-const userSchema = {
+module.exports = {
   loginUser: Joi.object({
     email: Joi.string().email().required(),
   })
 };
 
-module.exports = userSchema;
+

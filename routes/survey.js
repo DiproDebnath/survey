@@ -13,8 +13,8 @@ router.get("/result/:id", captureError(surveyController.getResultById));
 
 router.get("/:id", captureError(surveyController.getSurveyById));
       
-router.post("/create",[ middleware.verifyAuth, middleware.validator('survey', 'addSurvey')], captureError(surveyController.createSurvey));
+router.post("/create", middleware.verifyAuth, middleware.requestValidator('survey', 'addSurvey'), captureError(surveyController.createSurvey));
 
-router.put("/update/:id", middleware.validator('survey', 'updateSurvey'), captureError(surveyController.updateSurveyById));
+router.put("/update/:id", middleware.verifyAuth, middleware.requestValidator('survey', 'updateSurvey'), captureError(surveyController.updateSurveyById));
 
 module.exports = router;

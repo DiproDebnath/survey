@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const surveySchema = {
+module.exports = {
   addSurvey: Joi.object({
     name: Joi.string().required(),
   }),
@@ -9,4 +9,4 @@ const surveySchema = {
   }), 
 };
 
-module.exports = surveySchema;
+

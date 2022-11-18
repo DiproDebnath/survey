@@ -23,22 +23,10 @@ module.exports = (sequelize, DataTypes) => {
     surveyId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      
-      validate: {
-        async isExist(value) {
-          
-          let count = await Question.count({
-            where: {surveyId: value}
-          })
-         
-          if (count !== 0) {
-            throw new Error('You can add single question in a survey');
-          }
-        }
-      }
     },
     questionType: {
       type:DataTypes.ENUM("single", "multiple"),
+      allowNull: false,
       defaultValue: "single",
     },
   }, {

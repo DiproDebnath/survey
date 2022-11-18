@@ -1,35 +1,30 @@
-const { Question, Choice } = require("../models");
+const createHttpError = require("http-errors");
+const choiceService = require("../services/choiceService");
 
 module.exports = {
-    getAllChoice: async (req, res) => {
-        try {
-          const choice = await Choice.findAll();
-      
-          res.json(choice);
-        } catch (err) {
-          console.log(err);
-          res.status(500).json({ message: "Internal server error" });
-        }
-      },
-      createChoice: async (req, res) => {
-        try {
-          const question = await Question.findOne({ where: req.body.questionId });
-          if (question.questionTypeId == 1) {
-            throw { errors: [{ message: "Question type is single" }] };
-          }
-          const choiceItem = req.body.choice.map((item) => {
-            return { questionId: req.body.questionId, choice: item };
-          });
-          const choices = await Choice.bulkCreate(choiceItem);
-      
-          res.json(choices);
-        } catch (err) {
-          console.log(err);
-          if (err.errors) {
-            res.json({ message: err.errors[0].message });
-          } else {
-            res.status(500).json({ message: "Internal server error" });
-          }
-        }
-      }
-}
+  getAllChoice: async (req, res) => {
+    const choiceData = await choiceService.getAllChoice();
+    if (!choiceData.success)
+      throw createHttpError(choiceData.status, choiceData.message);
+
+    res.json(choiceData.data);
+  },
+  createChoice: async (req, res) => {
+    const validateChoice = await choiceService.validateSurveyBeforeCreateChoice(
+      req.body.questionId,
+      req.user.id
+    );
+    if (!validateChoice.success)
+      throw createHttpError(validateChoice.status, validateChoice.message);
+
+    const choices = await choiceService.createChoice(
+      req.body.questionId,
+      req.body.choice
+    );
+
+    if (!choices.success)
+      throw createHttpError(choices.status, choices.message);
+
+    res.json(choices.data);
+  },
+};

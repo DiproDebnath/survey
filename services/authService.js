@@ -13,7 +13,7 @@ module.exports = {
         id,
         email
       }, API_SECRET, {
-        expiresIn: 1800
+        expiresIn: 86400
       });
 
 

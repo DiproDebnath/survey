@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
   res.json("Survey Project");
 });
 
-app.post("/signin", middleware.validator("user", "loginUser"), captureError(authController.signIn));
+app.post("/signin", middleware.requestValidator("user", "loginUser"), captureError(authController.signIn));
 
 
 
@@ -25,7 +25,6 @@ app.post("/signin", middleware.validator("user", "loginUser"), captureError(auth
 
 const surveyRouter = require("./routes/survey");
 const questionRouter = require("./routes/question");
-const questionTypeRouter = require("./routes/questionType");
 const ChoiceRouter = require("./routes/Choice");
 const answerRouter = require("./routes/answer");
 
@@ -33,7 +32,6 @@ const answerRouter = require("./routes/answer");
 
 app.use("/survey", surveyRouter);
 app.use("/question", questionRouter);
-app.use("/question_type", questionTypeRouter);
 app.use("/choice", ChoiceRouter);
 app.use("/answer", answerRouter);
 

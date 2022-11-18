@@ -1,7 +1,7 @@
 const verifyAuth = require("./authMiddlaware");
-const validator = require("./validatorMiddleware");
+const requestValidator = require("./validatorMiddleware");
 
 module.exports = {
-    validator,
+    requestValidator,
     verifyAuth
 }

@@ -18,6 +18,7 @@ module.exports = {
       },
       questionType: {
         type: Sequelize.ENUM("single", "multiple"),
+        allowNull: false,
         defaultValue: "single",
       },
       createdAt: {
